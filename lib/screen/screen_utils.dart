@@ -3,6 +3,9 @@
  * email: zhuoyuan93@gmail.com
  */
 
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ScreenUtil {
@@ -10,13 +13,14 @@ class ScreenUtil {
 
   /// UI设计中手机尺寸 , px
   /// Size of the phone in UI Design , px
-  final double width;
-  final double height;
+  final double sketchWidth;
+  final double sketchHeight;
 
   /// 控制字体是否要根据系统的“字体大小”辅助选项来进行缩放。默认值为false。
   /// allowFontScaling Specifies whether fonts should scale to respect Text Size accessibility settings. The default is false.
   final bool allowFontScaling;
 
+  static final ValueNotifier<Size> screenSizeNotifier = ValueNotifier<Size>(Size(screenWidthDp, screenHeightDp));
   static MediaQueryData _mediaQueryData;
   static double _screenWidth;
   static double _screenHeight;
@@ -29,8 +33,8 @@ class ScreenUtil {
   static bool isPortrait;
   
   const ScreenUtil({
-    this.width = 1600,
-    this.height = 1024,
+    this.sketchWidth = 1600,
+    this.sketchHeight = 1024,
     this.allowFontScaling = false,
   });
 
@@ -49,7 +53,14 @@ class ScreenUtil {
     _textScaleFactor = mediaQuery.textScaleFactor;
     _infoStartup();
     isPortrait = screenWidth < screenHeight;
+    
+    print('onScreen changed ${Size(_screenWidth, _screenHeight)}');
+    screenSizeNotifier.value = Size(_screenWidth, _screenHeight);
   }
+
+  static double get screenLongestSide  => isPortrait ? screenHeightDp : screenWidthDp;
+  static double get screenShortestSide => isPortrait ? screenWidthDp : screenHeightDp;
+
 
   static MediaQueryData get mediaQueryData => _mediaQueryData;
 
@@ -87,9 +98,9 @@ class ScreenUtil {
 
   /// 实际的dp与UI设计px的比例
   /// The ratio of the actual dp to the design draft px
-  double get scaleWidth => _screenWidth / instance.width;
+  double get scaleWidth => _screenWidth / instance.sketchWidth;
 
-  double get scaleHeight => _screenHeight / instance.height;
+  double get scaleHeight => _screenHeight / instance.sketchHeight;
 
   /// 根据UI设计的设备宽度适配
   /// 高度也可以根据这个来做适配可以保证不变形,比如你先要一个正方形的时候.
@@ -122,15 +133,15 @@ class ScreenUtil {
     print('----------------------------------');
     print('      initial configuration       ');
     print('');
-    print('deisgnWidth    : $width');
-    print('designHeight   : $height');
+    print('deisgnWidth    : $sketchWidth');
+    print('designHeight   : $sketchHeight');
     print('ratio          : $_pixelRatio/$pixelRatio');
     print('screen width   : $_screenWidth/$screenWidth');
     print('screen height  : $_screenHeight/$screenHeight');
     print('statusBarHeight: $_statusBarHeight/$statusBarHeight');
     print('bottomBarHeight: $_bottomBarHeight/$bottomBarHeight');
     print('textScaleFactor: $_textScaleFactor/$textScaleFactory');
-    print('scaleWidth     : $scaleWidth/$width');
-    print('scaleHeight    : $scaleHeight/$height');
+    print('scaleWidth     : $scaleWidth/$sketchWidth');
+    print('scaleHeight    : $scaleHeight/$sketchHeight');
   }
 }

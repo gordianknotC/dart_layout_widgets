@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:layout/models/tag.dart';
+import '../models/tag.dart';
 
 class CloudStyle{
 	static const double PDL = 15;

@@ -1,6 +1,6 @@
 name: layout
 description: A new Flutter package.
-version: 0.0.1
+version: 0.0.2
 author:
 homepage: none
 
@@ -9,13 +9,11 @@ environment:
 
 dependencies:
   behaviors:
-    path: behaviors
+    path: ../../../myPackages/behaviors
   common:
-    path: common
-  audioplayer: ^0.5.2
-  path_provider: ^1.4.5
-  url_launcher: ^5.2.7
+    path: ../../../myPackages/common
   flutter_mobx: ^0.3.3+3
+  mobx: ^0.3.9+3
   carousel_slider: ^1.3.1
   animator: ^1.0.0+2
   random_color: ^1.0.3
@@ -23,6 +21,7 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
+  mobx_codegen: ^0.3.10+1
   flutter_test:
     sdk: flutter
 

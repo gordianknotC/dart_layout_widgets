@@ -8,6 +8,9 @@ enum EPlatform{
 }
 
 EPlatform getPlatform(){
+	if (Platform == null) {
+	  return EPlatform.windows;
+	}
 	try{
 		if (Platform.isWindows) {
 			return EPlatform.windows;
@@ -25,8 +28,8 @@ EPlatform getPlatform(){
 		throw Exception('uncaught platform');
 	} on UnsupportedError {
 		return EPlatform.windows;
-	} on Exception catch(e, s){
-		throw Exception('$e\n$s');
+	} catch(e, s){
+		return EPlatform.windows;
 	}
 }
 
