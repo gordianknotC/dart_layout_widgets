@@ -1,8 +1,8 @@
 import 'package:behaviors/behaviors.dart';
-import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
 import 'hiddable_widget.dart';
 
 

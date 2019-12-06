@@ -3,14 +3,41 @@
  * email: zhuoyuan93@gmail.com
  */
 
-import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class ScreenUtil {
-  static ScreenUtil instance = ScreenUtil();
+enum DesignCanvas{
+  small, medium, large
+}
 
+class ScreenUtil {
+  static BoxConstraints get screenConstraintMin => BoxConstraints(minWidth: ScreenUtil.screenWidthDp, minHeight: ScreenUtil.screenHeightDp);
+  static BoxConstraints get screenConstraintMax => BoxConstraints(maxWidth: ScreenUtil.screenWidthDp, maxHeight: ScreenUtil.screenHeightDp);
+  
+  static ScreenUtil largeDesign  ;
+  static ScreenUtil mediumDesign  ;
+  static ScreenUtil smallDesign  ;
+
+  static bool get isSmalDesign{
+    final w = (smallDesign).sketchWidth;
+    return screenWidthDp <= w;
+  }
+  
+  static bool get isMediumDesign{
+    return !isSmalDesign && !isLargeDesign;
+  }
+  
+  static bool get isLargeDesign{
+    final w = (largeDesign ?? mediumDesign ?? smallDesign).sketchWidth;
+    if (screenWidthDp >= w) {
+      return true;
+    } else if (screenWidthDp > (mediumDesign ?? smallDesign).sketchWidth) {
+      return true;
+    }
+    return false;
+  }
+  
   /// UI设计中手机尺寸 , px
   /// Size of the phone in UI Design , px
   final double sketchWidth;
@@ -19,6 +46,8 @@ class ScreenUtil {
   /// 控制字体是否要根据系统的“字体大小”辅助选项来进行缩放。默认值为false。
   /// allowFontScaling Specifies whether fonts should scale to respect Text Size accessibility settings. The default is false.
   final bool allowFontScaling;
+  
+  final DesignCanvas _designType;
 
   static final ValueNotifier<Size> screenSizeNotifier = ValueNotifier<Size>(Size(screenWidthDp, screenHeightDp));
   static MediaQueryData _mediaQueryData;
@@ -29,20 +58,33 @@ class ScreenUtil {
 
   static double _bottomBarHeight;
   static double _textScaleFactor;
-
   static bool isPortrait;
+
   
-  const ScreenUtil({
+  const ScreenUtil.large({
     this.sketchWidth = 1600,
     this.sketchHeight = 1024,
     this.allowFontScaling = false,
-  });
+  }): _designType = DesignCanvas.large;
+
+  const ScreenUtil.medium({
+    this.sketchWidth = 1024,
+    this.sketchHeight = 1024,
+    this.allowFontScaling = false,
+  }): _designType = DesignCanvas.medium;
+ 
+  const ScreenUtil.small({
+    this.sketchWidth = 545,
+    this.sketchHeight = 1024,
+    this.allowFontScaling = false,
+  }): _designType = DesignCanvas.small;
+  
 
   static ScreenUtil getInstance() {
-    return instance;
+    return largeDesign;
   }
 
-  void init(BuildContext context) {
+  static void init(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     _mediaQueryData = mediaQuery;
     _pixelRatio = mediaQuery.devicePixelRatio;
@@ -60,8 +102,7 @@ class ScreenUtil {
 
   static double get screenLongestSide  => isPortrait ? screenHeightDp : screenWidthDp;
   static double get screenShortestSide => isPortrait ? screenWidthDp : screenHeightDp;
-
-
+ 
   static MediaQueryData get mediaQueryData => _mediaQueryData;
 
   /// 每个逻辑像素的字体像素数，字体的缩放比例
@@ -98,9 +139,9 @@ class ScreenUtil {
 
   /// 实际的dp与UI设计px的比例
   /// The ratio of the actual dp to the design draft px
-  double get scaleWidth => _screenWidth / instance.sketchWidth;
+  double get scaleWidth => _screenWidth / sketchWidth;
 
-  double get scaleHeight => _screenHeight / instance.sketchHeight;
+  double get scaleHeight => _screenHeight / sketchHeight;
 
   /// 根据UI设计的设备宽度适配
   /// 高度也可以根据这个来做适配可以保证不变形,比如你先要一个正方形的时候.
@@ -129,19 +170,31 @@ class ScreenUtil {
       : setWidth(fontSize) / _textScaleFactor;
   
   
-  void _infoStartup(){
+  static void _infoStartup(){
     print('----------------------------------');
     print('      initial configuration       ');
     print('');
-    print('deisgnWidth    : $sketchWidth');
-    print('designHeight   : $sketchHeight');
+    if (isLargeDesign){
+      print('deisgnWidth (L): ${largeDesign?.sketchWidth}');
+      print('designHeight(L): ${largeDesign?.sketchHeight}');
+      print('scaleWidth (L): ${largeDesign?.scaleWidth}');
+      print('scaleHeight(L): ${largeDesign?.scaleHeight}');
+    }else if (isMediumDesign){
+      print('deisgnWidth (M): ${mediumDesign?.sketchWidth}');
+      print('designHeight(M): ${mediumDesign?.sketchHeight}');
+      print('scaleWidth (M): ${mediumDesign?.scaleWidth}');
+      print('scaleHeight(M): ${mediumDesign?.scaleHeight}');
+    }else{
+      print('deisgnWidth (S): ${smallDesign?.sketchWidth}');
+      print('designHeight(S): ${smallDesign?.sketchHeight}');
+      print('scaleWidth (S): ${smallDesign?.scaleWidth}');
+      print('scaleHeight(S): ${smallDesign?.scaleHeight}');
+    }
     print('ratio          : $_pixelRatio/$pixelRatio');
     print('screen width   : $_screenWidth/$screenWidth');
     print('screen height  : $_screenHeight/$screenHeight');
     print('statusBarHeight: $_statusBarHeight/$statusBarHeight');
     print('bottomBarHeight: $_bottomBarHeight/$bottomBarHeight');
     print('textScaleFactor: $_textScaleFactor/$textScaleFactory');
-    print('scaleWidth     : $scaleWidth/$sketchWidth');
-    print('scaleHeight    : $scaleHeight/$sketchHeight');
   }
 }

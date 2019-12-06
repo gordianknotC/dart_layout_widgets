@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:layout/screen/screen_utils.dart';
+
+import '../screen/screen_utils.dart';
 import 'stateful.dart';
 
 
@@ -40,6 +43,7 @@ class ResponsiveScreen extends StatelessWidget {
         constraints.maxWidth < 1200;
   }
   
+  // ignore: unused_element
   bool _isSmall(BoxConstraints constraints){
     return constraints.maxWidth < 768;
   }
@@ -76,57 +80,76 @@ class ResponsiveScreen extends StatelessWidget {
 
 
 class TResponsiveSize{
-  final int medium;
+  final int small;
   final int large;
-  const TResponsiveSize({@required this.large, this.medium });
+  const TResponsiveSize({@required this.large, this.small });
   
   @override String toString() {
-    return "TResponsiveSize($large/$medium)";
+    return "TResponsiveSize($large/$small)";
   }
 }
 
-const SIZE_SKILLAUDIO = TResponsiveSize(large: 768, medium: 580);
-const SIZE_CELLPHONE = TResponsiveSize(large: 768, medium: 360);
-const SIZE_DESKTOP   = TResponsiveSize(large: 1280, medium: 768);
+const SIZE_SKILLAUDIO = TResponsiveSize(large: 768, small: 580);
+const SIZE_GALLERY    = TResponsiveSize(large: 768, small: 580);
+const SIZE_CELLPHONE = TResponsiveSize(large: 768, small: 360);
+const SIZE_DESKTOP   = TResponsiveSize(large: 1280, small: 768);
+final SIZE_DESIGNCANVAS = TResponsiveSize(
+    large: ScreenUtil.mediumDesign.sketchWidth.toInt(),  // 1024
+    small: ScreenUtil.smallDesign.sketchWidth.toInt()   // 545
+);
+
+
+class TRWMedia{
+  final double mediaWidth;
+  final double mediaHeight;
+  double get maxWidth => mediaWidth;
+  double get maxHeight => mediaHeight;
+  
+  TRWMedia({this.mediaWidth, this.mediaHeight});
+  
+  TRWMedia.fromConstaints(BoxConstraints constraints)
+    : mediaWidth = constraints.maxWidth, mediaHeight = constraints.maxHeight,
+        assert(constraints.maxWidth < 10000, "input constraints with infinite width");
+}
 
 class ResponsiveElt extends StatelessWidget {
   final Widget large;
   final Widget medium;
   final Widget small;
-  final BoxConstraints constraints;
-  final TResponsiveSize size;
+  final TRWMedia media;
+  final TResponsiveSize responsiveSize;
 
   const ResponsiveElt({Key key,
     @required this.large,
-    @required this.size,
-    @required this.constraints,
+    @required this.responsiveSize,
+    @required this.media,
     this.medium,
     this.small,
   }): super(key: key);
   
-  bool isSmall(BoxConstraints constraints) {
-    return constraints.maxWidth <= size.medium;
+  bool isSmall(TRWMedia constraints) {
+    return constraints.maxWidth <= responsiveSize.small;
   }
   
-  bool isLargeOrMedium(BoxConstraints constraints) {
-    return constraints.maxWidth > size.medium;
+  bool isLargeOrMedium(TRWMedia constraints) {
+    return constraints.maxWidth > responsiveSize.small;
   }
   
-  bool isMedium(BoxConstraints constraints) {
-    return constraints.maxWidth >= size.medium && constraints.maxWidth < size.large;
+  bool isMedium(TRWMedia constraints) {
+    return constraints.maxWidth >= responsiveSize.small && constraints.maxWidth < responsiveSize.large;
   }
   
   @override
   Widget build(BuildContext context) {
-    if (isLargeOrMedium(constraints)) {
-      if (isMedium(constraints)) {
-        print('ResponsiveElt medium: ${constraints.maxWidth}/$size');
+    if (isLargeOrMedium(media)) {
+      if (isMedium(media)) {
+        print('ResponsiveElt medium: ${media.maxWidth}/$responsiveSize');
         return medium ?? large;
       }
-      print('ResponsiveElt larege: ${constraints.maxWidth}/$size');
+      print('ResponsiveElt larege: ${media.maxWidth}/$responsiveSize');
       return large;
     } else {
-      print('ResponsiveElt small: ${constraints.maxWidth}/$size');
+      print('ResponsiveElt small: ${media.maxWidth}/$responsiveSize');
       return small ?? large;
     }
   

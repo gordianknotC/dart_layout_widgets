@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-final _D = Logger(name:'HidABar', levels: LEVEL0);
 
 
 class HiddableAwareWidget extends StatelessWidget {
