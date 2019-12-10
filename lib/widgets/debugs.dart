@@ -6,10 +6,10 @@ Color get _random => _rc.randomColor();
 
 class BoundingBox extends StatelessWidget {
 	static bool _debug = true;
-	static void setDebugOn(){
+	static void setBoxDebugOn(){
 		_debug = true;
 	}
-	static void setDebugOff(){
+	static void setBoxDebugOff(){
 		_debug = false;
 	}
 	final Widget child;

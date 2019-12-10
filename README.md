@@ -2,6 +2,12 @@
 
 A new Flutter package.
 
+### Caution
+Do not use absolute import(package importt) to import any 
+project file, use relative import instead.
+
+
+
 ## Getting Started
 
 This project is a starting point for a Dart

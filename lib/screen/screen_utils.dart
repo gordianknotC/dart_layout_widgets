@@ -4,8 +4,12 @@
  */
 
 
+import 'package:common/common.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+final _D = Logger(name:'SCN_UTIL', levels: LEVEL0);
+
 
 enum DesignCanvas{
   small, medium, large
@@ -96,7 +100,7 @@ class ScreenUtil {
     _infoStartup();
     isPortrait = screenWidth < screenHeight;
     
-    print('onScreen changed ${Size(_screenWidth, _screenHeight)}');
+    _D.debug('onScreen changed ${Size(_screenWidth, _screenHeight)}');
     screenSizeNotifier.value = Size(_screenWidth, _screenHeight);
   }
 
@@ -171,30 +175,30 @@ class ScreenUtil {
   
   
   static void _infoStartup(){
-    print('----------------------------------');
-    print('      initial configuration       ');
-    print('');
+    _D.debug('----------------------------------');
+    _D.debug('      initial configuration       ');
+    _D.debug('');
     if (isLargeDesign){
-      print('deisgnWidth (L): ${largeDesign?.sketchWidth}');
-      print('designHeight(L): ${largeDesign?.sketchHeight}');
-      print('scaleWidth (L): ${largeDesign?.scaleWidth}');
-      print('scaleHeight(L): ${largeDesign?.scaleHeight}');
+      _D.debug('deisgnWidth (L): ${largeDesign?.sketchWidth}');
+      _D.debug('designHeight(L): ${largeDesign?.sketchHeight}');
+      _D.debug('scaleWidth (L): ${largeDesign?.scaleWidth}');
+      _D.debug('scaleHeight(L): ${largeDesign?.scaleHeight}');
     }else if (isMediumDesign){
-      print('deisgnWidth (M): ${mediumDesign?.sketchWidth}');
-      print('designHeight(M): ${mediumDesign?.sketchHeight}');
-      print('scaleWidth (M): ${mediumDesign?.scaleWidth}');
-      print('scaleHeight(M): ${mediumDesign?.scaleHeight}');
+      _D.debug('deisgnWidth (M): ${mediumDesign?.sketchWidth}');
+      _D.debug('designHeight(M): ${mediumDesign?.sketchHeight}');
+      _D.debug('scaleWidth (M): ${mediumDesign?.scaleWidth}');
+      _D.debug('scaleHeight(M): ${mediumDesign?.scaleHeight}');
     }else{
-      print('deisgnWidth (S): ${smallDesign?.sketchWidth}');
-      print('designHeight(S): ${smallDesign?.sketchHeight}');
-      print('scaleWidth (S): ${smallDesign?.scaleWidth}');
-      print('scaleHeight(S): ${smallDesign?.scaleHeight}');
+      _D.debug('deisgnWidth (S): ${smallDesign?.sketchWidth}');
+      _D.debug('designHeight(S): ${smallDesign?.sketchHeight}');
+      _D.debug('scaleWidth (S): ${smallDesign?.scaleWidth}');
+      _D.debug('scaleHeight(S): ${smallDesign?.scaleHeight}');
     }
-    print('ratio          : $_pixelRatio/$pixelRatio');
-    print('screen width   : $_screenWidth/$screenWidth');
-    print('screen height  : $_screenHeight/$screenHeight');
-    print('statusBarHeight: $_statusBarHeight/$statusBarHeight');
-    print('bottomBarHeight: $_bottomBarHeight/$bottomBarHeight');
-    print('textScaleFactor: $_textScaleFactor/$textScaleFactory');
+    _D.debug('ratio          : $_pixelRatio/$pixelRatio');
+    _D.debug('screen width   : $_screenWidth/$screenWidth');
+    _D.debug('screen height  : $_screenHeight/$screenHeight');
+    _D.debug('statusBarHeight: $_statusBarHeight/$statusBarHeight');
+    _D.debug('bottomBarHeight: $_bottomBarHeight/$bottomBarHeight');
+    _D.debug('textScaleFactor: $_textScaleFactor/$textScaleFactory');
   }
 }

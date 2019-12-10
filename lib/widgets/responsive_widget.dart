@@ -1,9 +1,10 @@
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
-import 'package:layout/screen/screen_utils.dart';
 
 import '../screen/screen_utils.dart';
 import 'stateful.dart';
 
+final _D = Logger(name:'RWD', levels: LEVEL0);
 
 
 class ResponsiveScreen extends StatelessWidget {
@@ -21,7 +22,7 @@ class ResponsiveScreen extends StatelessWidget {
       : super(key: key);
 
   static bool isSmallScreen(BuildContext context) {
-//    print('   isSmallScreen: ${MediaQuery.of(context).size.width < 768}/${MediaQuery.of(context).size.width}');
+//    _D.debug('   isSmallScreen: ${MediaQuery.of(context).size.width < 768}/${MediaQuery.of(context).size.width}');
     return MediaQuery.of(context).size.width < 768;
   }
 
@@ -52,15 +53,15 @@ class ResponsiveScreen extends StatelessWidget {
     if (_isLargeOrMedium(_constraints)) {
       if (_isMedium(_constraints)){
         // medium
-        print('rebuild responsive medium: ${_constraints.maxWidth}');
+        _D.debug('rebuild responsive medium: ${_constraints.maxWidth}');
         return mediumScreen ?? largeScreen;
       }
       // large
-      print('rebuild responsive large: ${_constraints.maxWidth}');
+      _D.debug('rebuild responsive large: ${_constraints.maxWidth}');
       return largeScreen;
     } else {
       // small
-      print('rebuild responsive small: ${_constraints.maxWidth}/ ${key}');
+      _D.debug('rebuild responsive small: ${_constraints.maxWidth}/ ${key}');
       return smallScreen ?? largeScreen;
     }
   }
@@ -91,7 +92,7 @@ class TResponsiveSize{
 
 const SIZE_SKILLAUDIO = TResponsiveSize(large: 768, small: 580);
 const SIZE_GALLERY    = TResponsiveSize(large: 768, small: 580);
-const SIZE_CELLPHONE = TResponsiveSize(large: 768, small: 360);
+const SIZE_CELLPHONE = TResponsiveSize(large: 768, small: 365);
 const SIZE_DESKTOP   = TResponsiveSize(large: 1280, small: 768);
 final SIZE_DESIGNCANVAS = TResponsiveSize(
     large: ScreenUtil.mediumDesign.sketchWidth.toInt(),  // 1024
@@ -143,13 +144,13 @@ class ResponsiveElt extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isLargeOrMedium(media)) {
       if (isMedium(media)) {
-        print('ResponsiveElt medium: ${media.maxWidth}/$responsiveSize');
+        _D.debug('ResponsiveElt medium: ${media.maxWidth}/$responsiveSize');
         return medium ?? large;
       }
-      print('ResponsiveElt larege: ${media.maxWidth}/$responsiveSize');
+      _D.debug('ResponsiveElt larege: ${media.maxWidth}/$responsiveSize');
       return large;
     } else {
-      print('ResponsiveElt small: ${media.maxWidth}/$responsiveSize');
+      _D.debug('ResponsiveElt small: ${media.maxWidth}/$responsiveSize');
       return small ?? large;
     }
   

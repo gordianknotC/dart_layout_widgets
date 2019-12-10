@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'screen_utils.dart';
 
 
-
-
 class TDim{
 	final double width;
 	final double height;
@@ -47,7 +45,6 @@ class TDims{
 	}
 	
 	double _setSmall(double Function(double) setter, double result){
-		print('set small adaptive($smallAdapt) for value: $result/${setter(result)}');
 		return _setX(setter, result, smallAdapt);
 	}
 	
@@ -125,7 +122,6 @@ class TDims{
 			setterL = ScreenUtil.smallDesign.setWidth;
 			setterR = ScreenUtil.smallDesign.setHeight;
 			adapt 	= smallAdapt;
-			print('small padding ${small?.adaptive}/${defaults?.adaptive}/$adapt $result');
 		}else {
 			result 	=  medium?.padding ?? defaults?.padding;
 			setterL = ScreenUtil.mediumDesign.setWidth;

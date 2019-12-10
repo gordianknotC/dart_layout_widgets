@@ -1,6 +1,8 @@
+import 'package:common/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'stateful.dart';
 
+final _D = Logger(name:'CTXW', levels: LEVEL0);
 
 class TContext{
 	final BoxConstraints constraints;
@@ -50,7 +52,7 @@ class _ContextKeeperState extends State<ContextKeeper> with StatefulMixin{
   }
   
   void _contextInit(){
-		print('contextKeeper phrase 3');
+		_D.debug('contextKeeper phrase 3');
 		final size = context.size;
 		double w, h;
 		if (widget.keepWidthOnly) {
@@ -63,7 +65,8 @@ class _ContextKeeperState extends State<ContextKeeper> with StatefulMixin{
 			w = size.width;
 			h = size.height;
 		}
-		_contextContainer[widget.contextKey] = TContext(BoxConstraints.expand(width : w, height: h), widget.screenSizeNotifier.value);
+		_contextContainer[widget.contextKey] =
+				TContext(BoxConstraints.expand(width : w, height: h), widget.screenSizeNotifier.value);
 	}
 	
   void _scheduleInitialContext(){
@@ -83,15 +86,15 @@ class _ContextKeeperState extends State<ContextKeeper> with StatefulMixin{
   Widget build(BuildContext context) {
 		if (_contextContainer[widget.contextKey] == null){
 			_scheduleInitialContext();
-			print('contextKeeper phrase 1: $_contextContainer}');
+			_D.debug('contextKeeper phrase 1: $_contextContainer}');
 			return widget.child;
 		}
 		final constraints = _contextContainer[widget.contextKey].constraints;
-		print('contextSize: ${constraints.maxWidth}/${constraints.maxHeight}');
+		_D.debug('contextSize: ${constraints.maxWidth}/${constraints.maxHeight}');
 		return ValueListenableBuilder<Size>(
 			valueListenable: widget.screenSizeNotifier,
 			builder: (context, size, w){
-				print('contextKeeper phrase 2 changed:${!isTheSameScreenSize}/${widget.screenSizeNotifier.value}');
+				_D.debug('contextKeeper phrase 2 changed:${!isTheSameScreenSize}/${widget.screenSizeNotifier.value}');
 				if (!isTheSameScreenSize){
 					_scheduleContext();
 					return widget.child;
@@ -109,7 +112,7 @@ class _ContextKeeperState extends State<ContextKeeper> with StatefulMixin{
   void dispose() {
     super.dispose();
 		_contextContainer.remove(widget.contextKey);
-		print('dispose ContextKeeper');
+		_D.debug('dispose ContextKeeper');
   }
 }
 
