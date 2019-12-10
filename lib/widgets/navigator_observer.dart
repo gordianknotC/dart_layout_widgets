@@ -10,6 +10,11 @@ class NavHistory{
 	
 	Route get last => data.isNotEmpty ? data.last : null;
 	
+	int get length => data.length;
+	bool get isEmpty => data.isEmpty;
+	bool get isNotEmpty => data.isNotEmpty;
+	
+	
 	void add(Route route){
 		_D.debug('add route: ${route.settings.name}');
 		return data.add(route);
@@ -38,7 +43,7 @@ class NavHistory{
 /// An interface for observing the behavior of a [Navigator].
 class AppNavObserver extends NavigatorObserver {
 	static AppNavObserver I;
-	static NavHistory history;
+	NavHistory history;
 	AppNavObserver._();
 	factory AppNavObserver.singleton(){
 		if (I == null) {
