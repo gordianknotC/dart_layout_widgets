@@ -20,7 +20,7 @@ class NavHistory{
 	void add(Route route){
 		_D.debug('add route: "${route.settings.name}" - $this');
 		if (data.isNotEmpty){
-			assert(route.settings.name != null, "may be you forget to assign route settings in your route builder?");
+//			assert(route.settings.name != null, "may be you forget to assign route settings in your route builder?");
 		}
 		return data.add(route);
 	}
