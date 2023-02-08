@@ -11,15 +11,15 @@ class ResponsiveScreen extends StatelessWidget {
   final Widget largeScreen;
   final Widget mediumScreen;
   final Widget smallScreen;
-  final BoxConstraints constraints;
+  final BoxConstraints? constraints;
   EPlatform get platform => PLATFORM;
   bool      get isMobile => IS_MOBILE;
 
   const ResponsiveScreen({Key? key,
     required this.largeScreen,
     required this.mediumScreen,
-    required this.constraints,
-    required this.smallScreen
+    required this.smallScreen,
+    this.constraints,
   }) : super(key: key);
 
   static bool isSmallScreen(BuildContext context) {
@@ -71,7 +71,7 @@ class ResponsiveScreen extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, _constraints) {
         if (_constraints.maxWidth > 10000 && constraints != null){
-          return buildBySize(context, constraints);
+          return buildBySize(context, constraints!);
         }
         return buildBySize(context, _constraints);
       },
