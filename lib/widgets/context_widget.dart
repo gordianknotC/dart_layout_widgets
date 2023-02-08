@@ -34,8 +34,8 @@ class ContextKeeper extends StatefulWidget {
 	final bool 		keepHeightOnly;
 	final ValueNotifier<Size> screenSizeNotifier;
 	const ContextKeeper(
-			this.contextKey, {@required this.child, this.keepWidthOnly = false,
-			this.keepHeightOnly = false, @required this.screenSizeNotifier,
+			this.contextKey, {required this.child, this.keepWidthOnly = false,
+			this.keepHeightOnly = false, required this.screenSizeNotifier,
 	}): super(key: contextKey);
 
   @override
@@ -53,8 +53,8 @@ class _ContextKeeperState extends State<ContextKeeper> with StatefulMixin{
 
   void _contextInit(){
 		_D.d(()=>'contextKeeper phrase 3');
-		final size = context.size;
-		double w, h;
+		final size = context.size!;
+		late double w, h;
 		if (widget.keepWidthOnly) {
 			h = size.height;
 		}
@@ -78,8 +78,8 @@ class _ContextKeeperState extends State<ContextKeeper> with StatefulMixin{
 	}
 
 	bool get isTheSameScreenSize{
-		final prevsize = _contextContainer[widget.contextKey].size;
-		return prevsize.width == widget.screenSizeNotifier.value.width && prevsize.height == widget.screenSizeNotifier.value.height;
+		final prevsize = _contextContainer[widget.contextKey]?.size ;
+		return prevsize?.width == widget.screenSizeNotifier.value.width && prevsize?.height == widget.screenSizeNotifier.value.height;
 	}
 
 	@override
@@ -89,8 +89,8 @@ class _ContextKeeperState extends State<ContextKeeper> with StatefulMixin{
 			_D.d(()=>'contextKeeper phrase 1: $_contextContainer}');
 			return widget.child;
 		}
-		final constraints = _contextContainer[widget.contextKey].constraints;
-		_D.d(()=>'contextSize: ${constraints.maxWidth}/${constraints.maxHeight}');
+		final constraints = _contextContainer[widget.contextKey]?.constraints;
+		_D.d(()=>'contextSize: ${constraints?.maxWidth ?? 0}/${constraints?.maxHeight ?? 0}');
 		return ValueListenableBuilder<Size>(
 			valueListenable: widget.screenSizeNotifier,
 			builder: (context, size, w){
@@ -100,8 +100,8 @@ class _ContextKeeperState extends State<ContextKeeper> with StatefulMixin{
 					return widget.child;
 				}
 				return Container(
-						width: constraints.maxWidth,
-						height: constraints.maxHeight,
+						width: constraints?.maxWidth,
+						height: constraints?.maxHeight,
 						child: widget.child
 				);
 			},

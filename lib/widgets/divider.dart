@@ -8,7 +8,7 @@ class DividerF extends StatelessWidget {
 	final double lflag;
 	final double rflag;
 	final double length;
-	const DividerF({this.color, this.length, this.height = 1, this.lflag = 0.15, this.rflag = 0.15});
+	const DividerF({required this.color, required this.length, this.height = 1, this.lflag = 0.15, this.rflag = 0.15});
 	
 	@override
   Widget build(BuildContext context) {

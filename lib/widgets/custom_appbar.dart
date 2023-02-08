@@ -10,12 +10,12 @@ typedef TCustomAppBarBuilder = Widget Function(Widget leading, BuildContext cont
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 	static Widget defaultLeading(BuildContext context, {IconData icon = Icons.menu}){
-		final ModalRoute<dynamic> parentRoute = ModalRoute.of(context);
+		final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
 		final bool canPop = parentRoute?.canPop ?? false;
 		final bool useCloseButton = parentRoute is PageRoute<dynamic> && parentRoute.fullscreenDialog;
 
 		bool hasDrawer = Scaffold.of(context).hasDrawer;
-		Widget _leading;
+		Widget? _leading;
 		if (hasDrawer) {
 			_leading = IconButton(
 				icon: Icon(icon),
@@ -39,18 +39,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 	}
 
 	final double height;
-	final Widget child;
-	final Widget leading;
-	final TCustomAppBarBuilder builder;
-	const CustomAppBar({Key key,
-		@required this.height,  this.child, this.builder, this.leading,
+	final Widget? child;
+	final Widget? leading;
+	final TCustomAppBarBuilder? builder;
+	const CustomAppBar({Key? key,
+		required this.height, this.child, this.builder, required this.leading,
 	}) : super(key: key);
 
 
 
 	Widget getLeading(BuildContext context){
 		if (leading != null) {
-		  return leading;
+		  return leading!;
 		}
 		return defaultLeading(context);
 	}
@@ -62,7 +62,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 			?? Row(
 				mainAxisAlignment: MainAxisAlignment.start,
 				children:[
-					_leading, child
+					_leading,
 			]);
 	}
 
@@ -113,15 +113,19 @@ class HiddableAppBar extends CustomAppBar  {
 	final ScrollAccAware awareness;
 	final ScrollDirection hideDirection;
 	const HiddableAppBar({
-		Key key, 											this.awareness,  this.hideDirection = ScrollDirection.reverse,
-		@required double height,  		Widget child,
-		TCustomAppBarBuilder builder, Widget leading,
+		Key? key,
+		required this.awareness,
+		this.hideDirection = ScrollDirection.reverse,
+		required double height,
+		Widget? child,
+		TCustomAppBarBuilder? builder,
+		Widget? leading,
 	}) :  super(key: key, height: height, child: child, builder: builder, leading: leading);
 
  	@override Widget build(BuildContext context){
  		return HiddableAwareWidget(
 			x: 0,y: 0, awareness: awareness, hideDirection: hideDirection,
-			child: builder?.call(getLeading(context), context) ?? child
+			child: builder?.call(getLeading(context), context) ?? child ?? Container()
 		);
 	}
 }

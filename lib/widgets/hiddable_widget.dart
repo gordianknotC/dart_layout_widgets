@@ -13,7 +13,8 @@ class HiddableAwareWidget extends StatelessWidget {
 	final Widget child;
 	final ScrollAccAware awareness;
 	final ScrollDirection hideDirection;
-	const HiddableAwareWidget({this.x, this.y, this.child, this.awareness, this.hideDirection = ScrollDirection.reverse});
+	const HiddableAwareWidget({
+		required this.x, required this.y, required this.child, required this.awareness, this.hideDirection = ScrollDirection.reverse});
 
 	@override Widget build(BuildContext context) {
 		return Observer(builder: observerGuard(() { //OB:

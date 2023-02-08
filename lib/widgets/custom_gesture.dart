@@ -16,12 +16,12 @@ class CustomPanGestureRecognizer extends OneSequenceGestureRecognizer {
 	final bool Function(Offset offset) onPanDown;
 	final Function(Offset offset) onPanUpdate;
 	final Function(Offset offset) onPanEnd;
-	int _custom_pointer;
-	int get custom_pointer => _custom_pointer;
+	int? _custom_pointer;
+	int? get custom_pointer => _custom_pointer;
 	CustomPanGestureRecognizer(
-			{@required this.onPanDown,
-				@required this.onPanUpdate,
-				@required this.onPanEnd});
+			{required this.onPanDown,
+				required this.onPanUpdate,
+				required this.onPanEnd});
 
 	void stopAndResumeTracking(int pointer){
 		try {
@@ -37,7 +37,7 @@ class CustomPanGestureRecognizer extends OneSequenceGestureRecognizer {
 	}
 	void stopTracking(){
 		try {
-			stopTrackingPointer(_custom_pointer);
+			stopTrackingPointer(_custom_pointer!);
 			_D.d(()=>'stopTracking');
 		} on AssertionError catch(e) {
 		} catch (e, s) {
@@ -48,7 +48,7 @@ class CustomPanGestureRecognizer extends OneSequenceGestureRecognizer {
 
 	void startTracking(){
 		try {
-			startTrackingPointer(_custom_pointer);
+			startTrackingPointer(_custom_pointer!);
 			resolve(GestureDisposition.accepted);
 		} on AssertionError catch(e){
 		} catch (e, s) {
@@ -137,7 +137,7 @@ enum DualControllerState{
 //			)		);
 //	}
 class PanelGestureDetector extends RawGestureDetector{
-	PanelGestureDetector({@required Widget child, @required ScrollerNestedPanelGestureController gestureController}):
+	PanelGestureDetector({required Widget child, required ScrollerNestedPanelGestureController gestureController}):
 			super(gestures: <Type, GestureRecognizerFactory>{
 				CustomPanGestureRecognizer:
 				GestureRecognizerFactoryWithHandlers<CustomPanGestureRecognizer>(
@@ -155,14 +155,14 @@ class ScrollerNestedPanelGestureController{
 	final PanelController panelController;
 	double panelHeight;
 
-	void Function() _onOpened;
-	void Function() _onClosed;
+	void Function()? _onOpened;
+	void Function()? _onClosed;
 
 	// ignore: avoid_setters_without_getters
 	void Function() wrapOnOpened(void cb()){
 		return (){
 			_D.d(()=>'on open panel');
-			if (panelController.getPanelPosition() == 1 && pageController.offset == 0){
+			if (panelController.panelPosition == 1.0 && pageController.offset == 0){
 				cb();
 				_D.d(()=>'on open shift');
 				shiftScrollContent();
@@ -173,7 +173,7 @@ class ScrollerNestedPanelGestureController{
 	void Function() wrapOnClosed(void cb()){
 		return (){
 			_D.d(()=>'on close panel');
-			if (panelController.getPanelPosition() == 0 && pageController.offset != 0){
+			if (panelController.panelPosition == 0.0 && pageController.offset != 0){
 				cb();
 				_D.d(()=>'on close shift');
 				shiftScrollContent();
@@ -181,7 +181,7 @@ class ScrollerNestedPanelGestureController{
 		};
 	}
 
-	CustomPanGestureRecognizer detector;
+	late CustomPanGestureRecognizer detector;
 	bool _repelListening = false;
 
 	/// content scroller positions...
@@ -215,7 +215,9 @@ class ScrollerNestedPanelGestureController{
 	}
 
 	ScrollerNestedPanelGestureController({
-		@required this.pageController, @required this.panelController, this.panelHeight
+		required this.pageController,
+		required this.panelController,
+		this.panelHeight = 32.0
 	}){
 		detector = CustomPanGestureRecognizer(
 			onPanDown: _onPanDown,
@@ -266,7 +268,7 @@ class ScrollerNestedPanelGestureController{
 		///    pointer to panel controller
 		if (_isApproachingStart){
 			_insertTracking = true;
-			_drag_start_ratio = panelController.getPanelPosition();
+			_drag_start_ratio = panelController.panelPosition;
 			detector.startTracking();
 			_D.d(()=>'approaching start, startTracking');
 			return;
@@ -274,7 +276,7 @@ class ScrollerNestedPanelGestureController{
 		///
 		/// 1) content scroller position is at the end
 		if (_isApproachingEnd){
-			final ratio = _drag_start_ratio = panelController.getPanelPosition();
+			final ratio = _drag_start_ratio = panelController.panelPosition;
 			_D.d(()=>'approaching end ${ratio}');
 			/// 2) if user are scrolling up and content scroller position is at the end
 			/// 	a) if panel scroll position is at the beginning - no hand over
@@ -295,7 +297,7 @@ class ScrollerNestedPanelGestureController{
 		_delta = 0;
 		_drag_displacement = 0;
 		_drag_start_y = offset.dy;
-		_drag_start_ratio = panelController.getPanelPosition();
+		_drag_start_ratio = panelController.panelPosition;
 		_D.d(()=>'onPanDown: $offset/${pageController.offset}');
 		return false;
 	}
@@ -317,7 +319,7 @@ class ScrollerNestedPanelGestureController{
 
 		if (_isApproachingStart && _drag_displacement < 0 || _isApproachingEnd){
 			final value = _drag_start_ratio + (_drag_displacement / panelHeight);
-			panelController.setPanelPosition(min(1, value));
+			panelController.panelPosition = (min(1, value));
 			//_D.d(()=>'onPanUpdate: $_drag_displacement');
 			return;
 		}
@@ -325,7 +327,7 @@ class ScrollerNestedPanelGestureController{
 		if (_delta == 0 && _current_offset == 0){
 			final value = _drag_start_ratio + (_drag_displacement / panelHeight);
 			//_D.d(()=>'onPanUpdate: ${_drag_start_ratio} / ${_drag_displacement / panelHeight}');
-			panelController.setPanelPosition(min(1, value));
+			panelController.panelPosition = (min(1, value));
 			return;
 		}
 
@@ -334,7 +336,7 @@ class ScrollerNestedPanelGestureController{
 
 	void _onPanEnd(Offset offset) {
 		_D.d(()=>'_onPanEnd: $offset');
-		if (panelController.getPanelPosition() < 0.85){
+		if (panelController.panelPosition < 0.85){
 //			shiftPageController();
 			panelController.close();
 			_D.d(()=>'close panel');

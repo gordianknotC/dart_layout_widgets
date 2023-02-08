@@ -5,20 +5,20 @@ import 'screen_utils.dart';
 
 
 class TDim{
-	final double width;
-	final double height;
+	final double? width;
+	final double? height;
 	final double left;
 	final double top;
-	final EdgeInsets padding;
+	final EdgeInsets? padding;
 	
 	/// adaptive to screen size
-	final bool adaptive;
+	final bool? adaptive;
 	
 	const TDim({
 		this.width,  this.height, this.left = 0, this.top = 0, this.padding , this.adaptive
 	});
 	
-	TDim copyWith({double width, double height, double left, double top, EdgeInsets padding, bool adaptive,}) {
+	TDim copyWith({double? width, double? height, double? left, double? top, EdgeInsets? padding, bool? adaptive,}) {
 		return TDim(width: width ?? this.width,
 				height: height ?? this.height,
 				left: left ?? this.left,
@@ -30,10 +30,10 @@ class TDim{
 }
 
 class TDims{
-	final TDim small;
-	final TDim medium;
-	final TDim large;
-	final TDim defaults;
+	final TDim? small;
+	final TDim? medium;
+	final TDim? large;
+	final TDim? defaults;
 	const TDims({this.small, this.medium, this.large, this.defaults})
 			: assert(small != null || medium != null || large != null || defaults != null);
 	
@@ -59,56 +59,56 @@ class TDims{
 	double get width{
 		if (ScreenUtil.isLargeDesign){
 			final result = large?.width ?? defaults?.width;
-			return _setLarge(ScreenUtil.largeDesign.setWidth, result);
+			return _setLarge(ScreenUtil.largeDesign.setWidth, result ?? 0.0);
 		}else if (ScreenUtil.isSmalDesign){
 			final result =  small?.width ?? defaults?.width;
-			return _setSmall(ScreenUtil.smallDesign.setWidth, result);
+			return _setSmall(ScreenUtil.smallDesign.setWidth, result ?? 0.0);
 		}else {
 			final result =  medium?.width ?? defaults?.width;
-			return _setMedium(ScreenUtil.mediumDesign.setWidth, result);
+			return _setMedium(ScreenUtil.mediumDesign.setWidth, result ?? 0.0);
 		}
 	}
 	double get height{
 		if (ScreenUtil.isLargeDesign){
-			final result = large?.height ?? defaults.height;
+			final result = large?.height ?? defaults?.height ?? 0.0;
 			return _setLarge(ScreenUtil.largeDesign.setHeight, result);
 		}else if (ScreenUtil.isSmalDesign){
-			final result =  small?.height ?? defaults.height;
+			final result =  small?.height ?? defaults?.height ?? 0.0;
 			return _setSmall(ScreenUtil.smallDesign.setHeight, result);
 		}else {
-			final result =  medium?.height ?? defaults.height;
+			final result =  medium?.height ?? defaults?.height ?? 0.0;
 			return _setMedium(ScreenUtil.mediumDesign.setHeight, result);
 		}
 	}
 	
 	double get left{
 		if (ScreenUtil.isLargeDesign){
-			final result = large?.left ?? defaults.left;
+			final result = large?.left ?? defaults?.left ?? 0;
 			return _setLarge(ScreenUtil.largeDesign.setWidth, result);
 		}else if (ScreenUtil.isSmalDesign){
-			final result =  small?.left ?? defaults.left;
+			final result =  small?.left ?? defaults?.left ?? 0;
 			return _setSmall(ScreenUtil.smallDesign.setWidth, result);
 		}else {
-			final result =  medium?.left ?? defaults.left;
+			final result =  medium?.left ?? defaults?.left ?? 0;
 			return _setMedium(ScreenUtil.mediumDesign.setWidth, result);
 		}
 	}
 	
 	double get top{
 		if (ScreenUtil.isLargeDesign){
-			final result = large?.height ?? defaults.height;
+			final result = large?.height ?? defaults?.height ?? 0;
 			return _setLarge(ScreenUtil.largeDesign.setHeight, result);
 		}else if (ScreenUtil.isSmalDesign){
-			final result =  small?.height ?? defaults.height;
+			final result =  small?.height ?? defaults?.height ?? 0;
 			return _setSmall(ScreenUtil.smallDesign.setHeight, result);
 		}else {
-			final result =  medium?.height ?? defaults.height;
+			final result =  medium?.height ?? defaults?.height ?? 0;
 			return _setMedium(ScreenUtil.mediumDesign.setHeight, result);
 		}
 	}
 	
 	EdgeInsets get padding{
-		EdgeInsets result;
+		EdgeInsets? result;
 		double 	Function(double) setterL;
 		double 	Function(double) setterR;
 		bool 		adapt;

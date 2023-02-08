@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class SlideRightRoute extends PageRouteBuilder<Widget> {
 	final Widget widget;
-	SlideRightRoute({@required this.widget, @required RouteSettings settings})
+	SlideRightRoute({required this.widget, required RouteSettings settings})
 			: super(
 		pageBuilder: (
 				BuildContext context,

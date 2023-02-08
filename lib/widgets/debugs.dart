@@ -14,7 +14,7 @@ class BoundingBox extends StatelessWidget {
 	}
 	final Widget child;
 	final Color borderColor;
-	BoundingBox({this.child}): borderColor = _random;
+	BoundingBox({required this.child}): borderColor = _random;
 	
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,7 @@ repository: https://github.com/gordianknotC/dart_layout_widgets.git
 publish_to: none
 description: Common widgets
 environment:
-  sdk: ">=2.5.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   ui_common_behaviors:
@@ -20,7 +20,7 @@ dependencies:
   carousel_slider: ^4.2.1
   animator: ^3.2.0
   random_color: ^1.0.5
-  sliding_up_panel: any
+  sliding_up_panel: ^2.0.0+1
   route_observer_mixin: ^1.7.0
   flutter:
     sdk: flutter

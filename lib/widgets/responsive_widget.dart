@@ -15,11 +15,12 @@ class ResponsiveScreen extends StatelessWidget {
   EPlatform get platform => PLATFORM;
   bool      get isMobile => IS_MOBILE;
 
-  const ResponsiveScreen({Key key,
-        @required this.largeScreen,
-        this.mediumScreen, this.constraints,
-        this.smallScreen})
-      : super(key: key);
+  const ResponsiveScreen({Key? key,
+    required this.largeScreen,
+    required this.mediumScreen,
+    required this.constraints,
+    required this.smallScreen
+  }) : super(key: key);
 
   static bool isSmallScreen(BuildContext context) {
 //    _D.d(()=>'   isSmallScreen: ${MediaQuery.of(context).size.width < 768}/${MediaQuery.of(context).size.width}');
@@ -83,7 +84,7 @@ class ResponsiveScreen extends StatelessWidget {
 class TResponsiveSize{
   final int small;
   final int large;
-  const TResponsiveSize({@required this.large, this.small });
+  const TResponsiveSize({required this.large, required this.small });
 
   @override String toString() {
     return "TResponsiveSize($large/$small)";
@@ -106,7 +107,10 @@ class TRWMedia{
   double get maxWidth => mediaWidth;
   double get maxHeight => mediaHeight;
 
-  TRWMedia({this.mediaWidth, this.mediaHeight});
+  TRWMedia({
+    this.mediaWidth = double.infinity,
+    this.mediaHeight = double.infinity
+  });
 
   TRWMedia.fromConstaints(BoxConstraints constraints)
     : mediaWidth = constraints.maxWidth, mediaHeight = constraints.maxHeight,
@@ -120,12 +124,12 @@ class ResponsiveElt extends StatelessWidget {
   final TRWMedia media;
   final TResponsiveSize responsiveSize;
 
-  const ResponsiveElt({Key key,
-    @required this.large,
-    @required this.responsiveSize,
-    @required this.media,
-    this.medium,
-    this.small,
+  const ResponsiveElt({Key? key,
+    required this.large,
+    required this.responsiveSize,
+    required this.media,
+    required this.medium,
+    required this.small,
   }): super(key: key);
 
   bool isSmall(TRWMedia constraints) {

@@ -19,9 +19,9 @@ class ScreenUtil {
   static BoxConstraints get screenConstraintMin => BoxConstraints(minWidth: ScreenUtil.screenWidthDp, minHeight: ScreenUtil.screenHeightDp);
   static BoxConstraints get screenConstraintMax => BoxConstraints(maxWidth: ScreenUtil.screenWidthDp, maxHeight: ScreenUtil.screenHeightDp);
 
-  static ScreenUtil largeDesign  ;
-  static ScreenUtil mediumDesign  ;
-  static ScreenUtil smallDesign  ;
+  static late ScreenUtil largeDesign  ;
+  static late ScreenUtil mediumDesign  ;
+  static late ScreenUtil smallDesign  ;
 
   static bool get isSmalDesign{
     final w = (smallDesign).sketchWidth;
@@ -54,15 +54,15 @@ class ScreenUtil {
   final DesignCanvas _designType;
 
   static final ValueNotifier<Size> screenSizeNotifier = ValueNotifier<Size>(Size(screenWidthDp, screenHeightDp));
-  static MediaQueryData _mediaQueryData;
-  static double _screenWidth;
-  static double _screenHeight;
-  static double _pixelRatio;
-  static double _statusBarHeight;
+  static late MediaQueryData _mediaQueryData;
+  static late double _screenWidth;
+  static late double _screenHeight;
+  static late double _pixelRatio;
+  static late double _statusBarHeight;
 
-  static double _bottomBarHeight;
-  static double _textScaleFactor;
-  static bool isPortrait;
+  static late double _bottomBarHeight;
+  static late double _textScaleFactor;
+  static late bool isPortrait;
 
 
   const ScreenUtil.large({
@@ -88,7 +88,10 @@ class ScreenUtil {
     return largeDesign;
   }
 
-  static void init(BuildContext context) {
+  static void init(BuildContext context, {required ScreenUtil large, required ScreenUtil medium, required ScreenUtil small}) {
+    largeDesign = large;
+    smallDesign = small;
+    mediumDesign = medium;
     MediaQueryData mediaQuery = MediaQuery.of(context);
     _mediaQueryData = mediaQuery;
     _pixelRatio = mediaQuery.devicePixelRatio;

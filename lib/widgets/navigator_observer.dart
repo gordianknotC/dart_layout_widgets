@@ -11,7 +11,7 @@ class NavHistory{
 	final List<Route> data = [];
 	NavHistory();
 
-	Route get last => data.isNotEmpty ? data.last : null;
+	Route? get last => data.isNotEmpty ? data.last : null;
 	int get length => data.length;
 	bool get isEmpty => data.isEmpty;
 	bool get isNotEmpty => data.isNotEmpty;
@@ -68,28 +68,28 @@ enum ERouteEventType{
 class TRouteEvent{
 	final ERouteEventType type;
 	final Route current;
-	final Route prev;
+	final Route? prev;
 	const TRouteEvent(this.current, this.prev, this.type);
 }
 
 /// An interface for observing the behavior of a [Navigator].
 class AppNavObserver extends NavigatorObserver {
-	static AppNavObserver I;
+	static AppNavObserver? I;
 	final StreamController<TRouteEvent> _onRouteCtrl = StreamController<TRouteEvent>.broadcast();
 
-	NavHistory history;
+	NavHistory? history;
 	AppNavObserver._();
 
 
 	/// The navigator that the observer is observing, if any.
-	@override NavigatorState get navigator => super.navigator;
+	@override NavigatorState? get navigator => super.navigator;
 
 
 	factory AppNavObserver.singleton(){
 		if (I == null) {
 		  return I = AppNavObserver._()..history = NavHistory();
 		}
-		return I;
+		return I!;
 	}
 
 	StreamSubscription<TRouteEvent> addEventListener(void cb(TRouteEvent e)){
@@ -101,22 +101,25 @@ class AppNavObserver extends NavigatorObserver {
 	///
 	/// The route immediately below that one, and thus the previously active
 	/// route, is `previousRoute`.
-	@override void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
-		_D.d(()=>'didPush ${route.settings.name} - ${previousRoute?.settings?.name}');
-		assert(history.last == previousRoute);
-		history.add(route);
-		_onRouteCtrl.add(TRouteEvent(route, previousRoute, ERouteEventType.push));
+	@override void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+		_D.d(()=>'didPush ${route.settings.name} - ${previousRoute?.settings.name}');
+		assert(history!.last == previousRoute);
+		if (history != null){
+			history!.add(route);
+			_onRouteCtrl.add(TRouteEvent(route, previousRoute, ERouteEventType.push));
+		}
+
 	}
 
 	/// The [Navigator] popped `route`.
 	///
 	/// The route immediately below that one, and thus the [newly] active
 	/// route, is `previousRoute`.
-	@override void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
-		_D.d(()=>'didpop ${route.settings.name} - ${previousRoute?.settings?.name}');
-		assert(history.last == route);
-		history.removeLast();
-		assert(history.last == previousRoute);
+	@override void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+		_D.d(()=>'didpop ${route.settings.name} - ${previousRoute?.settings.name}');
+		assert(history!.last == route);
+		history!.removeLast();
+		assert(history!.last == previousRoute);
 		_onRouteCtrl.add(TRouteEvent(route, previousRoute, ERouteEventType.pop));
 	}
 
@@ -129,21 +132,25 @@ class AppNavObserver extends NavigatorObserver {
 	/// bottommost route being removed, if any, is `previousRoute`, and this
 	/// method will be called once for each removed route, from the topmost route
 	/// to the bottommost route.
-	@override void didRemove(Route<dynamic> route, Route<dynamic> previousRoute) {
-		_D.d(()=>'didRemove ${route.settings.name} - ${previousRoute?.settings?.name}');
-		final removedIdx = history.indexOf(route);
-		final neighborIdx = history.indexOf(previousRoute);
+	@override void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+		_D.d(()=>'didRemove ${route.settings.name} - ${previousRoute?.settings.name}');
+		final removedIdx = history!.indexOf(route);
+		final neighborIdx = previousRoute != null ? history!.indexOf(previousRoute) : 0;
 		assert(removedIdx == neighborIdx +1);
-		history.removeAt(removedIdx);
+		history!.removeAt(removedIdx);
 		_onRouteCtrl.add(TRouteEvent(route, previousRoute, ERouteEventType.remove));
 	}
 
 	/// The [Navigator] replaced `oldRoute` with `newRoute`.
-	@override void didReplace({ Route<dynamic> newRoute, Route<dynamic> oldRoute }) {
-		_D.d(()=>'didReplace ${newRoute.settings.name} - ${oldRoute.settings.name}');
-		final idx = history.indexOf(oldRoute);
-		history[idx] = newRoute;
-		_onRouteCtrl.add(TRouteEvent(newRoute, oldRoute, ERouteEventType.replace));
+	@override void didReplace({ Route<dynamic>? newRoute, Route<dynamic>? oldRoute }) {
+		_D.d(()=>'didReplace ${newRoute?.settings.name} - ${oldRoute?.settings.name}');
+		final idx = oldRoute != null ? history!.indexOf(oldRoute) : -1;
+		if (idx != -1){
+			if (newRoute != null){
+				history![idx] = newRoute;
+				_onRouteCtrl.add(TRouteEvent(newRoute, oldRoute, ERouteEventType.replace));
+			}
+		}
 	}
 
 	/// The [Navigator]'s route `route` is being moved by a user gesture.
@@ -157,7 +164,7 @@ class AppNavObserver extends NavigatorObserver {
 	/// Though the gesture may not necessarily conclude at `previousRoute` if
 	/// the gesture is canceled. In that case, [didStopUserGesture] is still
 	/// called but a follow-up [didPop] is not.
-	@override void didStartUserGesture(Route<dynamic> route, Route<dynamic> previousRoute) {
+	@override void didStartUserGesture(Route<dynamic> route, Route<dynamic>? previousRoute) {
 		_D.d(()=>'didStartUserGesture');
 	}
 
