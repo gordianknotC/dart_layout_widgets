@@ -1,20 +1,22 @@
-name: layout
-description: A new Flutter package.
-version: 0.0.2
-author:
-homepage: none
-
+name: layout_widgets
+repository: https://github.com/gordianknotC/dart_layout_widgets.git
+publish_to: none
+description: Common widgets
 environment:
   sdk: ">=2.5.0 <3.0.0"
 
 dependencies:
-  behaviors:
-    path: ../../../myPackages/behaviors
-  common:
-    path: ../../../myPackages/common
+  ui_common_behaviors:
+    git:
+      url: https://github.com/gordianknotC/dart_common_ui_behaviors.git
+      ref: master
+  dart_common:
+    git:
+      url: https://github.com/gordianknotC/dart_common.git
+      ref: master
   
-  flutter_mobx: ^0.3.3+3
-  mobx: ^0.3.9+3
+  flutter_mobx: ^2.0.0
+  mobx: ^2.1.3
   carousel_slider: ^1.3.1
   animator: ^1.0.0+2
   random_color: ^1.0.3
@@ -24,7 +26,7 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
-  mobx_codegen: ^0.3.10+1
+  mobx_codegen: ^2.1.1
   flutter_test:
     sdk: flutter
 

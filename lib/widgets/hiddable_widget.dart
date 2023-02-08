@@ -1,5 +1,5 @@
-import 'package:behaviors/behaviors.dart';
-import 'package:common/common.dart';
+import 'package:ui_common_behaviors/ui_common_behaviors.dart';
+import 'package:dart_common/dart_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -14,7 +14,7 @@ class HiddableAwareWidget extends StatelessWidget {
 	final ScrollAccAware awareness;
 	final ScrollDirection hideDirection;
 	const HiddableAwareWidget({this.x, this.y, this.child, this.awareness, this.hideDirection = ScrollDirection.reverse});
-	
+
 	@override Widget build(BuildContext context) {
 		return Observer(builder: observerGuard(() { //OB:
 			final d  = hideDirection == ScrollDirection.forward ? - 1 : 1;
@@ -29,7 +29,7 @@ class HiddableAwareWidget extends StatelessWidget {
 				)
 			);
 		}, "HiddableAwareWidget.build"));
-		
+
 	}
 }
 

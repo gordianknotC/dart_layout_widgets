@@ -1,4 +1,4 @@
-import 'package:behaviors/behaviors.dart';
+import 'package:ui_common_behaviors/ui_common_behaviors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,7 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 		final ModalRoute<dynamic> parentRoute = ModalRoute.of(context);
 		final bool canPop = parentRoute?.canPop ?? false;
 		final bool useCloseButton = parentRoute is PageRoute<dynamic> && parentRoute.fullscreenDialog;
-		
+
 		bool hasDrawer = Scaffold.of(context).hasDrawer;
 		Widget _leading;
 		if (hasDrawer) {
@@ -37,7 +37,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 		}
 		return _leading;
 	}
-	
+
 	final double height;
 	final Widget child;
 	final Widget leading;
@@ -45,16 +45,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 	const CustomAppBar({Key key,
 		@required this.height,  this.child, this.builder, this.leading,
 	}) : super(key: key);
-	
-	
-	
+
+
+
 	Widget getLeading(BuildContext context){
 		if (leading != null) {
 		  return leading;
 		}
 		return defaultLeading(context);
 	}
-	
+
 	@override
 	Widget build(BuildContext context) {
 		final _leading = getLeading(context);
@@ -65,7 +65,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 					_leading, child
 			]);
 	}
-	
+
 	@override
 	Size get preferredSize => Size.fromHeight(height);
 }
@@ -117,7 +117,7 @@ class HiddableAppBar extends CustomAppBar  {
 		@required double height,  		Widget child,
 		TCustomAppBarBuilder builder, Widget leading,
 	}) :  super(key: key, height: height, child: child, builder: builder, leading: leading);
-	
+
  	@override Widget build(BuildContext context){
  		return HiddableAwareWidget(
 			x: 0,y: 0, awareness: awareness, hideDirection: hideDirection,

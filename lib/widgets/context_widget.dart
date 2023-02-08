@@ -1,8 +1,8 @@
-import 'package:common/common.dart';
+import 'package:dart_common/dart_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'stateful.dart';
 
-final _D = Logger(name:'CTXW', levels: LEVEL0);
+final _D = Logger.filterableLogger(moduleName:'CTXW');
 
 class TContext{
 	final BoxConstraints constraints;
@@ -50,9 +50,9 @@ class _ContextKeeperState extends State<ContextKeeper> with StatefulMixin{
   void initState() {
     super.initState();
   }
-  
+
   void _contextInit(){
-		_D.debug('contextKeeper phrase 3');
+		_D.d(()=>'contextKeeper phrase 3');
 		final size = context.size;
 		double w, h;
 		if (widget.keepWidthOnly) {
@@ -68,33 +68,33 @@ class _ContextKeeperState extends State<ContextKeeper> with StatefulMixin{
 		_contextContainer[widget.contextKey] =
 				TContext(BoxConstraints.expand(width : w, height: h), widget.screenSizeNotifier.value);
 	}
-	
+
   void _scheduleInitialContext(){
 		scheduleUpdateWhen(() => _contextContainer[widget.contextKey] == null, _contextInit);
 	}
-	
+
 	void _scheduleContext(){
 		scheduleUpdate(_contextInit);
 	}
-	
+
 	bool get isTheSameScreenSize{
 		final prevsize = _contextContainer[widget.contextKey].size;
 		return prevsize.width == widget.screenSizeNotifier.value.width && prevsize.height == widget.screenSizeNotifier.value.height;
 	}
-	
+
 	@override
   Widget build(BuildContext context) {
 		if (_contextContainer[widget.contextKey] == null){
 			_scheduleInitialContext();
-			_D.debug('contextKeeper phrase 1: $_contextContainer}');
+			_D.d(()=>'contextKeeper phrase 1: $_contextContainer}');
 			return widget.child;
 		}
 		final constraints = _contextContainer[widget.contextKey].constraints;
-		_D.debug('contextSize: ${constraints.maxWidth}/${constraints.maxHeight}');
+		_D.d(()=>'contextSize: ${constraints.maxWidth}/${constraints.maxHeight}');
 		return ValueListenableBuilder<Size>(
 			valueListenable: widget.screenSizeNotifier,
 			builder: (context, size, w){
-				_D.debug('contextKeeper phrase 2 changed:${!isTheSameScreenSize}/${widget.screenSizeNotifier.value}');
+				_D.d(()=>'contextKeeper phrase 2 changed:${!isTheSameScreenSize}/${widget.screenSizeNotifier.value}');
 				if (!isTheSameScreenSize){
 					_scheduleContext();
 					return widget.child;
@@ -107,12 +107,12 @@ class _ContextKeeperState extends State<ContextKeeper> with StatefulMixin{
 			},
 		);
 	}
-	
+
 	@override
   void dispose() {
     super.dispose();
 		_contextContainer.remove(widget.contextKey);
-		_D.debug('dispose ContextKeeper');
+		_D.d(()=>'dispose ContextKeeper');
   }
 }
 

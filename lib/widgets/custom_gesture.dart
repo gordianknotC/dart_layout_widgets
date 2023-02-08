@@ -1,13 +1,13 @@
 import 'dart:math';
 
-import 'package:common/common.dart';
+import 'package:dart_common/dart_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 
-final _D = Logger(name:'HOME', levels: LEVEL0);
+final _D = Logger.filterableLogger(moduleName:'HOME');
 
 
 /// fetched from https://www.davidanaya.io/flutter/combine-multiple-gestures.html
@@ -22,7 +22,7 @@ class CustomPanGestureRecognizer extends OneSequenceGestureRecognizer {
 			{@required this.onPanDown,
 				@required this.onPanUpdate,
 				@required this.onPanEnd});
-	
+
 	void stopAndResumeTracking(int pointer){
 		try {
 			stopTracking();
@@ -30,37 +30,37 @@ class CustomPanGestureRecognizer extends OneSequenceGestureRecognizer {
 			resolve(GestureDisposition.accepted);
 		} on AssertionError catch(e){
 		} catch (e, s) {
-			_D.debug('[ERROR] CustomPanGestureRecognizer.stopAndResumeTracking failed: $e\n$s');
+			_D.d(()=>'[ERROR] CustomPanGestureRecognizer.stopAndResumeTracking failed: $e\n$s');
 			rethrow;
 		}
-		
+
 	}
 	void stopTracking(){
 		try {
 			stopTrackingPointer(_custom_pointer);
-			_D.debug('stopTracking');
+			_D.d(()=>'stopTracking');
 		} on AssertionError catch(e) {
 		} catch (e, s) {
-			_D.debug('[ERROR] CustomPanGestureRecognizer.stopTracking failed: $e\n$s');
+			_D.d(()=>'[ERROR] CustomPanGestureRecognizer.stopTracking failed: $e\n$s');
 			rethrow;
 		}
 	}
-	
+
 	void startTracking(){
 		try {
 			startTrackingPointer(_custom_pointer);
 			resolve(GestureDisposition.accepted);
 		} on AssertionError catch(e){
 		} catch (e, s) {
-			_D.debug('[ERROR] CustomPanGestureRecognizer.startTracking failed: $e\n$s');
+			_D.d(()=>'[ERROR] CustomPanGestureRecognizer.startTracking failed: $e\n$s');
 			rethrow;
 		}
-		
+
 	}
-	
+
 	@override
 	void addPointer(PointerEvent event) {
-		
+
 		_custom_pointer = event.pointer;
 		if (onPanDown(event.position)) {
 			startTrackingPointer(event.pointer);
@@ -69,7 +69,7 @@ class CustomPanGestureRecognizer extends OneSequenceGestureRecognizer {
 			stopTrackingPointer(event.pointer);
 		}
 	}
-	
+
 	@override
 	void handleEvent(PointerEvent event) {
 		_custom_pointer = event.pointer;
@@ -81,13 +81,13 @@ class CustomPanGestureRecognizer extends OneSequenceGestureRecognizer {
 			stopTrackingPointer(event.pointer);
 		}
 	}
-	
+
 	@override
 	String get debugDescription => 'customPan';
-	
+
 	@override
 	void didStopTrackingLastPointer(int pointer) {
-		_D.debug('didStopTrackingLastPointer $pointer');
+		_D.d(()=>'didStopTrackingLastPointer $pointer');
 	}
 }
 
@@ -143,7 +143,7 @@ class PanelGestureDetector extends RawGestureDetector{
 				GestureRecognizerFactoryWithHandlers<CustomPanGestureRecognizer>(
 					() => gestureController.detector,
 					(CustomPanGestureRecognizer instance) {
-					
+
 					},
 				),
 			}, child: child);
@@ -154,17 +154,17 @@ class ScrollerNestedPanelGestureController{
 	final PageController pageController;
 	final PanelController panelController;
 	double panelHeight;
-	
+
 	void Function() _onOpened;
 	void Function() _onClosed;
-	
+
 	// ignore: avoid_setters_without_getters
 	void Function() wrapOnOpened(void cb()){
 		return (){
-			_D.debug('on open panel');
+			_D.d(()=>'on open panel');
 			if (panelController.getPanelPosition() == 1 && pageController.offset == 0){
 				cb();
-				_D.debug('on open shift');
+				_D.d(()=>'on open shift');
 				shiftScrollContent();
 			}
 		};
@@ -172,48 +172,48 @@ class ScrollerNestedPanelGestureController{
 	// ignore: avoid_setters_without_getters
 	void Function() wrapOnClosed(void cb()){
 		return (){
-			_D.debug('on close panel');
+			_D.d(()=>'on close panel');
 			if (panelController.getPanelPosition() == 0 && pageController.offset != 0){
 				cb();
-				_D.debug('on close shift');
+				_D.d(()=>'on close shift');
 				shiftScrollContent();
 			}
 		};
 	}
-	
+
 	CustomPanGestureRecognizer detector;
 	bool _repelListening = false;
-	
+
 	/// content scroller positions...
 	double _delta = 0;
 	double _prev_offset = 0;
 	double _current_offset = 0;
-	
+
 	/// panel scroller positions...
 	double _drag_start_y = 0;
 	double _drag_start_ratio = 0;
 	double _drag_displacement = 0;
 	double _draggin_y = 0;
 	double _drop_y = 0;
-	
+
 	/// while true, hand over gesture tracking to custom gesture(panel)
 	bool _insertTracking = false;
-	
+
 	/// is content scroller position at the end
 	bool get _isApproachingEnd{
 		return _delta > 0 && pageController.position.extentAfter < 5;
 	}
-	
+
 	/// is content scroller position at the beginning
 	bool get _isApproachingStart{
 		return _delta < 0 && _current_offset <= 5;
 	}
-	
+
 	/// is user intent to collapse panel
 	bool get _isIntentToCollapse{
 		return _delta == 0 && _current_offset <= 5;
 	}
-	
+
 	ScrollerNestedPanelGestureController({
 		@required this.pageController, @required this.panelController, this.panelHeight
 	}){
@@ -225,14 +225,14 @@ class ScrollerNestedPanelGestureController{
 		pageController.addListener(_onPageScroll);
 		shiftScrollContent();
 	}
-	
+
 	int _retries = 0;
 	void shiftScrollContent(){
 		SchedulerBinding.instance.addPostFrameCallback((_){
 			if (pageController.hasClients){
 				_repelListening = true;
 				_retries = 0;
-				_D.debug('shift pageController');
+				_D.d(()=>'shift pageController');
 				/// make displacement for scroller content, so that gesture
 				/// could be detected whether it's at the beginning of scroll position
 				/// or not.
@@ -247,17 +247,17 @@ class ScrollerNestedPanelGestureController{
 			}
 		});
 	}
-	
+
 	void _onPageScroll(){
 		if (_repelListening){
-			_D.debug('_repelListening');
+			_D.d(()=>'_repelListening');
 			_repelListening = false;
 //			return;
 		}
-		
+
 		_current_offset = pageController.offset;
 		_delta = _current_offset - _prev_offset;
-		
+
 		if (_current_offset != 0)
 			_prev_offset = _current_offset;
 		///
@@ -268,14 +268,14 @@ class ScrollerNestedPanelGestureController{
 			_insertTracking = true;
 			_drag_start_ratio = panelController.getPanelPosition();
 			detector.startTracking();
-			_D.debug('approaching start, startTracking');
+			_D.d(()=>'approaching start, startTracking');
 			return;
 		}
 		///
 		/// 1) content scroller position is at the end
 		if (_isApproachingEnd){
 			final ratio = _drag_start_ratio = panelController.getPanelPosition();
-			_D.debug('approaching end ${ratio}');
+			_D.d(()=>'approaching end ${ratio}');
 			/// 2) if user are scrolling up and content scroller position is at the end
 			/// 	a) if panel scroll position is at the beginning - no hand over
 			/// 	b) if panel scroll position is not at the beginning.
@@ -284,68 +284,68 @@ class ScrollerNestedPanelGestureController{
 				_insertTracking = true;
 				_drag_start_ratio = ratio;
 				detector.startTracking();
-				_D.debug('approach end at non start position, startTracking');
+				_D.d(()=>'approach end at non start position, startTracking');
 			}
 			return;
 		}
-//		_D.debug('$_current_offset/ $_delta - after:${pageController.position.extentAfter}/before:${pageController.position.extentBefore}');
+//		_D.d(()=>'$_current_offset/ $_delta - after:${pageController.position.extentAfter}/before:${pageController.position.extentBefore}');
 	}
-	
+
 	bool _onPanDown(Offset offset) {
 		_delta = 0;
 		_drag_displacement = 0;
 		_drag_start_y = offset.dy;
 		_drag_start_ratio = panelController.getPanelPosition();
-		_D.debug('onPanDown: $offset/${pageController.offset}');
+		_D.d(()=>'onPanDown: $offset/${pageController.offset}');
 		return false;
 	}
-	
+
 	void _onPanUpdate(Offset offset) {
 		if (_insertTracking){
 			_drag_start_y = offset.dy;
 			_insertTracking = false;
-			_D.debug('reset insert tracking');
+			_D.d(()=>'reset insert tracking');
 		}
-		
+
 		_draggin_y = offset.dy;
 		_drag_displacement = _drag_start_y - _draggin_y;
 		if (!_isApproachingEnd && _drag_displacement > 0){
 			detector.stopTracking();
-			_D.debug('stop tracking, exploring more content');
+			_D.d(()=>'stop tracking, exploring more content');
 			return;
 		}
-		
+
 		if (_isApproachingStart && _drag_displacement < 0 || _isApproachingEnd){
 			final value = _drag_start_ratio + (_drag_displacement / panelHeight);
 			panelController.setPanelPosition(min(1, value));
-			//_D.debug('onPanUpdate: $_drag_displacement');
+			//_D.d(()=>'onPanUpdate: $_drag_displacement');
 			return;
 		}
-		
+
 		if (_delta == 0 && _current_offset == 0){
 			final value = _drag_start_ratio + (_drag_displacement / panelHeight);
-			//_D.debug('onPanUpdate: ${_drag_start_ratio} / ${_drag_displacement / panelHeight}');
+			//_D.d(()=>'onPanUpdate: ${_drag_start_ratio} / ${_drag_displacement / panelHeight}');
 			panelController.setPanelPosition(min(1, value));
 			return;
 		}
-		
-		_D.debug('uncaught ...');
+
+		_D.d(()=>'uncaught ...');
 	}
-	
+
 	void _onPanEnd(Offset offset) {
-		_D.debug('_onPanEnd: $offset');
+		_D.d(()=>'_onPanEnd: $offset');
 		if (panelController.getPanelPosition() < 0.85){
 //			shiftPageController();
 			panelController.close();
-			_D.debug('close panel');
+			_D.d(()=>'close panel');
 		}else{
 //			shiftPageController();
 			panelController.open();
-			_D.debug('open panel');
+			_D.d(()=>'open panel');
 		}
 		_drop_y = offset.dy;
 	}
-	
+
 	void dispose(){
 		pageController.dispose();
 		detector.dispose();

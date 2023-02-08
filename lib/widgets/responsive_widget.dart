@@ -1,10 +1,10 @@
-import 'package:common/common.dart';
+import 'package:dart_common/dart_common.dart';
 import 'package:flutter/material.dart';
 
 import '../screen/screen_utils.dart';
 import 'stateful.dart';
 
-final _D = Logger(name:'RWD', levels: LEVEL0);
+final _D = Logger.filterableLogger(moduleName:'RWD');
 
 
 class ResponsiveScreen extends StatelessWidget {
@@ -14,7 +14,7 @@ class ResponsiveScreen extends StatelessWidget {
   final BoxConstraints constraints;
   EPlatform get platform => PLATFORM;
   bool      get isMobile => IS_MOBILE;
-  
+
   const ResponsiveScreen({Key key,
         @required this.largeScreen,
         this.mediumScreen, this.constraints,
@@ -22,7 +22,7 @@ class ResponsiveScreen extends StatelessWidget {
       : super(key: key);
 
   static bool isSmallScreen(BuildContext context) {
-//    _D.debug('   isSmallScreen: ${MediaQuery.of(context).size.width < 768}/${MediaQuery.of(context).size.width}');
+//    _D.d(()=>'   isSmallScreen: ${MediaQuery.of(context).size.width < 768}/${MediaQuery.of(context).size.width}');
     return MediaQuery.of(context).size.width < 768;
   }
 
@@ -34,7 +34,7 @@ class ResponsiveScreen extends StatelessWidget {
     return MediaQuery.of(context).size.width >= 768 &&
         MediaQuery.of(context).size.width < 1200;
   }
-  
+
   bool _isLargeOrMedium(BoxConstraints constraints){
     return constraints.maxWidth >= 768;
   }
@@ -43,25 +43,25 @@ class ResponsiveScreen extends StatelessWidget {
     return constraints.maxWidth >= 768 &&
         constraints.maxWidth < 1200;
   }
-  
+
   // ignore: unused_element
   bool _isSmall(BoxConstraints constraints){
     return constraints.maxWidth < 768;
   }
-  
+
   Widget buildBySize(BuildContext context, BoxConstraints _constraints){
     if (_isLargeOrMedium(_constraints)) {
       if (_isMedium(_constraints)){
         // medium
-        _D.debug('rebuild responsive medium: ${_constraints.maxWidth}');
+        _D.d(()=>'rebuild responsive medium: ${_constraints.maxWidth}');
         return mediumScreen ?? largeScreen;
       }
       // large
-      _D.debug('rebuild responsive large: ${_constraints.maxWidth}');
+      _D.d(()=>'rebuild responsive large: ${_constraints.maxWidth}');
       return largeScreen;
     } else {
       // small
-      _D.debug('rebuild responsive small: ${_constraints.maxWidth}/ ${key}');
+      _D.d(()=>'rebuild responsive small: ${_constraints.maxWidth}/ ${key}');
       return smallScreen ?? largeScreen;
     }
   }
@@ -84,7 +84,7 @@ class TResponsiveSize{
   final int small;
   final int large;
   const TResponsiveSize({@required this.large, this.small });
-  
+
   @override String toString() {
     return "TResponsiveSize($large/$small)";
   }
@@ -105,9 +105,9 @@ class TRWMedia{
   final double mediaHeight;
   double get maxWidth => mediaWidth;
   double get maxHeight => mediaHeight;
-  
+
   TRWMedia({this.mediaWidth, this.mediaHeight});
-  
+
   TRWMedia.fromConstaints(BoxConstraints constraints)
     : mediaWidth = constraints.maxWidth, mediaHeight = constraints.maxHeight,
         assert(constraints.maxWidth < 10000, "input constraints with infinite width");
@@ -127,32 +127,32 @@ class ResponsiveElt extends StatelessWidget {
     this.medium,
     this.small,
   }): super(key: key);
-  
+
   bool isSmall(TRWMedia constraints) {
     return constraints.maxWidth <= responsiveSize.small;
   }
-  
+
   bool isLargeOrMedium(TRWMedia constraints) {
     return constraints.maxWidth > responsiveSize.small;
   }
-  
+
   bool isMedium(TRWMedia constraints) {
     return constraints.maxWidth >= responsiveSize.small && constraints.maxWidth < responsiveSize.large;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     if (isLargeOrMedium(media)) {
       if (isMedium(media)) {
-        _D.debug('ResponsiveElt medium: ${media.maxWidth}/$responsiveSize');
+        _D.d(()=>'ResponsiveElt medium: ${media.maxWidth}/$responsiveSize');
         return medium ?? large;
       }
-      _D.debug('ResponsiveElt larege: ${media.maxWidth}/$responsiveSize');
+      _D.d(()=>'ResponsiveElt larege: ${media.maxWidth}/$responsiveSize');
       return large;
     } else {
-      _D.debug('ResponsiveElt small: ${media.maxWidth}/$responsiveSize');
+      _D.d(()=>'ResponsiveElt small: ${media.maxWidth}/$responsiveSize');
       return small ?? large;
     }
-  
+
   }
 }
