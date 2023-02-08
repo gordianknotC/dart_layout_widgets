@@ -118,19 +118,20 @@ class TRWMedia{
 }
 
 class ResponsiveElt extends StatelessWidget {
-  final Widget large;
-  final Widget medium;
-  final Widget small;
+  final Widget? large;
+  final Widget? medium;
+  final Widget? small;
   final TRWMedia media;
   final TResponsiveSize responsiveSize;
 
   const ResponsiveElt({Key? key,
-    required this.large,
     required this.responsiveSize,
     required this.media,
-    required this.medium,
-    required this.small,
-  }): super(key: key);
+    this.large,
+    this.medium,
+    this.small,
+  }): assert(large != null || medium != null || small != null),
+      super(key: key);
 
   bool isSmall(TRWMedia constraints) {
     return constraints.maxWidth <= responsiveSize.small;
@@ -149,13 +150,13 @@ class ResponsiveElt extends StatelessWidget {
     if (isLargeOrMedium(media)) {
       if (isMedium(media)) {
         _D.d(()=>'ResponsiveElt medium: ${media.maxWidth}/$responsiveSize');
-        return medium ?? large;
+        return medium ?? large!;
       }
       _D.d(()=>'ResponsiveElt larege: ${media.maxWidth}/$responsiveSize');
-      return large;
+      return large!;
     } else {
       _D.d(()=>'ResponsiveElt small: ${media.maxWidth}/$responsiveSize');
-      return small ?? large;
+      return small ?? large!;
     }
 
   }
