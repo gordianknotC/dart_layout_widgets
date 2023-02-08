@@ -1,5 +1,5 @@
 
-import 'package:layout_widgets/screen/screen_utils.dart';
+import 'package:layout_widgets/src/screen/screen_utils.dart';
 
 enum EBuildMode{
 	profile, debug, release
