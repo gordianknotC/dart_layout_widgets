@@ -137,7 +137,7 @@ enum DualControllerState{
 //			)		);
 //	}
 class PanelGestureDetector extends RawGestureDetector{
-	PanelGestureDetector({required Widget child, required ScrollerNestedPanelGestureController gestureController}):
+	PanelGestureDetector({required Widget child, required ScrollerNestablePanelGestureController gestureController}):
 			super(gestures: <Type, GestureRecognizerFactory>{
 				CustomPanGestureRecognizer:
 				GestureRecognizerFactoryWithHandlers<CustomPanGestureRecognizer>(
@@ -150,7 +150,12 @@ class PanelGestureDetector extends RawGestureDetector{
 }
 
 
-class ScrollerNestedPanelGestureController{
+@Deprecated("use NestedScrollerPanelGestureController instead")
+class ScrollerNestedPanelGestureController extends  ScrollerNestablePanelGestureController{
+  ScrollerNestedPanelGestureController({required PageController pageController, required PanelController panelController}) : super(pageController: pageController, panelController: panelController);
+}
+
+class ScrollerNestablePanelGestureController{
 	final PageController pageController;
 	final PanelController panelController;
 	double panelHeight;
@@ -214,7 +219,7 @@ class ScrollerNestedPanelGestureController{
 		return _delta == 0 && _current_offset <= 5;
 	}
 
-	ScrollerNestedPanelGestureController({
+	ScrollerNestablePanelGestureController({
 		required this.pageController,
 		required this.panelController,
 		this.panelHeight = 32.0

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:layout_widgets/layout_widgets.dart';
 import 'package:random_color/random_color.dart';
 
 RandomColor _rc = RandomColor();
 Color get _random => _rc.randomColor();
 
-class BoundingBox extends StatelessWidget {
+class DebugBox extends StatelessWidget {
 	static bool _debug = true;
 	static void setBoxDebugOn(){
 		_debug = true;
@@ -14,7 +15,7 @@ class BoundingBox extends StatelessWidget {
 	}
 	final Widget child;
 	final Color borderColor;
-	BoundingBox({required this.child}): borderColor = _random;
+	DebugBox({required this.child}): borderColor = _random;
 	
   @override
   Widget build(BuildContext context) {
@@ -26,4 +27,9 @@ class BoundingBox extends StatelessWidget {
 				child: child)
 			: child;
   }
+}
+
+@Deprecated("use DContainer instead")
+class BoundingBox extends DebugBox {
+  BoundingBox({required Widget child}) : super(child: child);
 }

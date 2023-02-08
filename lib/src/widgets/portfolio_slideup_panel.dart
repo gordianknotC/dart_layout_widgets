@@ -8,7 +8,7 @@ class ScrollerNestableSlidingUpPanel extends SlidingUpPanel {
   ScrollerNestableSlidingUpPanel({
     Key? key,
     required Widget panel,
-    required ScrollerNestedPanelGestureController gestureController,
+    required ScrollerNestablePanelGestureController gestureController,
     bool backdropEnabled = false,
     bool backdropTapClosesPanel = true,
     bool isDraggable = true,
@@ -71,3 +71,5 @@ class ScrollerNestableSlidingUpPanel extends SlidingUpPanel {
     gestureController.panelHeight = maxHeight;
   }
 }
+
+// class ScrollerNestableSlidingUpPanel extends ScrollerNestableSlidingUpPanel{}

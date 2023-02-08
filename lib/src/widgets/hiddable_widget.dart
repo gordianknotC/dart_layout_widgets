@@ -7,13 +7,13 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 
 
-class HiddableAwareWidget extends StatelessWidget {
+class HidableAwareWidget extends StatelessWidget {
 	final double x;
 	final double y;
 	final Widget child;
 	final ScrollAccAware awareness;
 	final ScrollDirection hideDirection;
-	const HiddableAwareWidget({
+	const HidableAwareWidget({
 		required this.x, required this.y, required this.child, required this.awareness, this.hideDirection = ScrollDirection.reverse});
 
 	@override Widget build(BuildContext context) {
@@ -34,6 +34,10 @@ class HiddableAwareWidget extends StatelessWidget {
 	}
 }
 
+@Deprecated("use HidableAwareWidget instead")
+class HiddableAwareWidget extends HidableAwareWidget{
+  HiddableAwareWidget({required double x, required double y, required Widget child, required ScrollAccAware awareness}) : super(x: x, y: y, child: child, awareness: awareness);
+}
 
 
 

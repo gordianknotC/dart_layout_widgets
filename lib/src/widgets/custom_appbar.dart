@@ -109,10 +109,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 //			);
 //		});
 ///
-class HiddableAppBar extends CustomAppBar  {
+class HidableAppBar extends CustomAppBar  {
 	final ScrollAccAware awareness;
 	final ScrollDirection hideDirection;
-	const HiddableAppBar({
+	const HidableAppBar({
 		Key? key,
 		required this.awareness,
 		this.hideDirection = ScrollDirection.reverse,
@@ -123,13 +123,17 @@ class HiddableAppBar extends CustomAppBar  {
 	}) :  super(key: key, height: height, child: child, builder: builder, leading: leading);
 
  	@override Widget build(BuildContext context){
- 		return HiddableAwareWidget(
+ 		return HidableAwareWidget(
 			x: 0,y: 0, awareness: awareness, hideDirection: hideDirection,
 			child: builder?.call(getLeading(context), context) ?? child ?? Container()
 		);
 	}
 }
 
+@Deprecated("use HidableAppBar instead")
+class HiddableAppBar extends HidableAppBar{
+  HiddableAppBar({required ScrollAccAware awareness, required double height}) : super(awareness: awareness, height: height);
+}
 
 
 
