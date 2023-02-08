@@ -62,7 +62,7 @@ class ScreenUtil {
 
   static late double _bottomBarHeight;
   static late double _textScaleFactor;
-  static late bool isPortrait;
+  static late bool isPortrait = true;
 
 
   const ScreenUtil.large({
@@ -205,3 +205,4 @@ class ScreenUtil {
     _D.d(()=>'textScaleFactor: $_textScaleFactor/$textScaleFactory');
   }
 }
+
