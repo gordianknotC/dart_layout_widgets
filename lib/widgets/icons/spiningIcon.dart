@@ -17,9 +17,9 @@ class SpiningIcon extends StatelessWidget {
 			tween: Tween<double>(begin: 0, end: pi),
 			repeats: 1000,
 			duration: Duration(milliseconds: 500),
-			builder: (anim1){
+			builder: (ctx, state, widget){
 				return Transform.rotate(
-					angle: anim1.value,
+					angle: state.value,
 					child: Icon(iconData, color: color, size: size),
 				);
 			},
