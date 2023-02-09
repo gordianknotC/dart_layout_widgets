@@ -1,4 +1,4 @@
-[flutter 2019 web portfolio][portfolio]
+於 [flutter 2019 web portfolio][portfolio] 中抽出的 package
 
 ## 可用組件
 
