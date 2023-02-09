@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'hiddable_widget.dart';
+import '_hiddable_widget.dart';
 
 
-typedef TCustomAppBarBuilder = Widget Function(Widget leading, BuildContext context);
+typedef _TCustomAppBarBuilder = Widget Function(Widget leading, BuildContext context);
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 	static Widget defaultLeading(BuildContext context, {IconData icon = Icons.menu}){
 		final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
 		final bool canPop = parentRoute?.canPop ?? false;
@@ -41,8 +41,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 	final double height;
 	final Widget? child;
 	final Widget? leading;
-	final TCustomAppBarBuilder? builder;
-	const CustomAppBar({Key? key,
+	final _TCustomAppBarBuilder? builder;
+	const _CustomAppBar({Key? key,
 		required this.height, this.child, this.builder, required this.leading,
 	}) : super(key: key);
 
@@ -77,48 +77,48 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 ///
 /// [Example]:
 ///
-// HiddableAppBar(
-//			hideDirection: ScrollDirection.reverse,
-//			awareness: AppGeneralLayout.scrollAwareness,
-//			height: 60, builder:(leading, ctx){
-//			return Container(
-//				constraints: constraints,
-//				color: Colors.transparent,
-//				padding: EdgeInsets.only(top:20, bottom:10),
-//				child: Row(
-//						mainAxisSize: MainAxisSize.min,
-//						mainAxisAlignment: MainAxisAlignment.start,
-//						crossAxisAlignment: CrossAxisAlignment.center,
-//						children:[
-//							leading,
-//							BoundingBox(child: ResponsiveScreen(
-//								constraints: constraints,
-//								largeScreen : BoundingBox(child: Paddings.homePadding(child: _buildLogoLarge())),
-//								mediumScreen: BoundingBox(child: Paddings.homePadding(child: _buildLogoMedium())),
-//								smallScreen : BoundingBox(child: _buildLogo()),
-//							)),
-//							if (!ResponsiveScreen.isSmallScreen(context))
-//								Expanded(
-//									child: Row(
-//											mainAxisSize: MainAxisSize.min,
-//											mainAxisAlignment: MainAxisAlignment.end,
-//											children:_buildDrawerActionsWithoutSpacing(context, showIcon: false)),
-//								),
-//							SizedBox(width: ScreenUtil.instance.setWidth(HomePage.designPaddingLR + 50))
-//						]),
-//			);
-//		});
+/// HiddableAppBar(
+///			hideDirection: ScrollDirection.reverse,
+///			awareness: AppGeneralLayout.scrollAwareness,
+///			height: 60, builder:(leading, ctx){
+///			return Container(
+///				constraints: constraints,
+///				color: Colors.transparent,
+///				padding: EdgeInsets.only(top:20, bottom:10),
+///				child: Row(
+///						mainAxisSize: MainAxisSize.min,
+///						mainAxisAlignment: MainAxisAlignment.start,
+///						crossAxisAlignment: CrossAxisAlignment.center,
+///						children:[
+///							leading,
+///							BoundingBox(child: ResponsiveScreen(
+///								constraints: constraints,
+///								largeScreen : BoundingBox(child: Paddings.homePadding(child: _buildLogoLarge())),
+///								mediumScreen: BoundingBox(child: Paddings.homePadding(child: _buildLogoMedium())),
+///								smallScreen : BoundingBox(child: _buildLogo()),
+///							)),
+///							if (!ResponsiveScreen.isSmallScreen(context))
+///								Expanded(
+///									child: Row(
+///											mainAxisSize: MainAxisSize.min,
+///											mainAxisAlignment: MainAxisAlignment.end,
+///											children:_buildDrawerActionsWithoutSpacing(context, showIcon: false)),
+///								),
+///							SizedBox(width: ScreenUtil.instance.setWidth(HomePage.designPaddingLR + 50))
+///						]),
+///			);
+///		});
 ///
-class HidableAppBar extends CustomAppBar  {
+class _HidableAppBar extends _CustomAppBar  {
 	final ScrollAccAware awareness;
 	final ScrollDirection hideDirection;
-	const HidableAppBar({
+	const _HidableAppBar({
 		Key? key,
 		required this.awareness,
 		this.hideDirection = ScrollDirection.reverse,
 		required double height,
 		Widget? child,
-		TCustomAppBarBuilder? builder,
+		_TCustomAppBarBuilder? builder,
 		Widget? leading,
 	}) :  super(key: key, height: height, child: child, builder: builder, leading: leading);
 
@@ -131,8 +131,8 @@ class HidableAppBar extends CustomAppBar  {
 }
 
 @Deprecated("use HidableAppBar instead")
-class HiddableAppBar extends HidableAppBar{
-  HiddableAppBar({required ScrollAccAware awareness, required double height}) : super(awareness: awareness, height: height);
+class _HiddableAppBar extends _HidableAppBar{
+  _HiddableAppBar({required ScrollAccAware awareness, required double height}) : super(awareness: awareness, height: height);
 }
 
 

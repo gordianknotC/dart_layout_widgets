@@ -6,8 +6,16 @@ import 'stateful.dart';
 
 final _D = Logger.filterableLogger(moduleName:'RWD');
 
+var _RBOUND = 1200;
+var _LBOUND = 768;
 
 class ResponsiveScreen extends StatelessWidget {
+  static void setRbound(int size){
+    _RBOUND = size;
+  }
+  static void setLbound(int size){
+    _LBOUND = size;
+  }
   final Widget largeScreen;
   final Widget mediumScreen;
   final Widget smallScreen;
@@ -23,31 +31,29 @@ class ResponsiveScreen extends StatelessWidget {
   }) : super(key: key);
 
   static bool isSmallScreen(BuildContext context) {
-//    _D.d(()=>'   isSmallScreen: ${MediaQuery.of(context).size.width < 768}/${MediaQuery.of(context).size.width}');
-    return MediaQuery.of(context).size.width < 768;
+    return MediaQuery.of(context).size.width < _LBOUND;
   }
 
   static bool isLargeScreen(BuildContext context) {
-    return MediaQuery.of(context).size.width >= 768;
+    return MediaQuery.of(context).size.width >= _LBOUND;
   }
 
   static bool isMediumScreen(BuildContext context) {
-    return MediaQuery.of(context).size.width >= 768 &&
-        MediaQuery.of(context).size.width < 1200;
+    return MediaQuery.of(context).size.width >= _LBOUND &&
+        MediaQuery.of(context).size.width < _RBOUND;
   }
 
   bool _isLargeOrMedium(BoxConstraints constraints){
-    return constraints.maxWidth >= 768;
+    return constraints.maxWidth >= _LBOUND;
   }
 
   bool _isMedium(BoxConstraints constraints){
-    return constraints.maxWidth >= 768 &&
-        constraints.maxWidth < 1200;
+    return constraints.maxWidth >= _LBOUND &&
+        constraints.maxWidth < _RBOUND;
   }
 
-  // ignore: unused_element
   bool _isSmall(BoxConstraints constraints){
-    return constraints.maxWidth < 768;
+    return constraints.maxWidth < _LBOUND;
   }
 
   Widget buildBySize(BuildContext context, BoxConstraints _constraints){
@@ -81,23 +87,32 @@ class ResponsiveScreen extends StatelessWidget {
 
 
 
-class TResponsiveSize{
-  final int small;
-  final int large;
-  const TResponsiveSize({required this.large, required this.small });
+class ResponsiveSize{
+  final int lbound;
+  final int rbound;
+  const ResponsiveSize({required this.rbound, required this.lbound });
 
+  bool isSmall(num size) {
+    return size <= lbound;
+  }
+  bool isLargeOrMedium(num size) {
+    return size > lbound;
+  }
+  bool isMedium(num size) {
+    return size >= lbound && size < rbound;
+  }
   @override String toString() {
-    return "TResponsiveSize($large/$small)";
+    return "TResponsiveSize($rbound/$lbound)";
   }
 }
 
-const SIZE_SKILLAUDIO = TResponsiveSize(large: 768, small: 580);
-const SIZE_GALLERY    = TResponsiveSize(large: 768, small: 580);
-const SIZE_CELLPHONE = TResponsiveSize(large: 768, small: 365);
-const SIZE_DESKTOP   = TResponsiveSize(large: 1280, small: 768);
-final SIZE_DESIGNCANVAS = TResponsiveSize(
-    large: ScreenUtil.mediumDesign.sketchWidth.toInt(),  // 1024
-    small: ScreenUtil.smallDesign.sketchWidth.toInt()   // 545
+const SIZE_SKILLAUDIO = ResponsiveSize(rbound: 768, lbound: 580);
+const SIZE_GALLERY    = ResponsiveSize(rbound: 768, lbound: 580);
+const SIZE_CELLPHONE = ResponsiveSize(rbound: 768, lbound: 365);
+const SIZE_DESKTOP   = ResponsiveSize(rbound: 1280, lbound: 768);
+final SIZE_DESIGNCANVAS = ResponsiveSize(
+    rbound: ScreenUtil.mediumDesign.sketchWidth.toInt(),  // 1024
+    lbound: ScreenUtil.smallDesign.sketchWidth.toInt()   // 545
 );
 
 
@@ -122,7 +137,7 @@ class ResponsiveElt extends StatelessWidget {
   final Widget? medium;
   final Widget? small;
   final TRWMedia media;
-  final TResponsiveSize responsiveSize;
+  final ResponsiveSize responsiveSize;
 
   const ResponsiveElt({Key? key,
     required this.responsiveSize,
@@ -134,15 +149,18 @@ class ResponsiveElt extends StatelessWidget {
       super(key: key);
 
   bool isSmall(TRWMedia constraints) {
-    return constraints.maxWidth <= responsiveSize.small;
+    final w = constraints.maxWidth;
+    return responsiveSize.isSmall(w);
   }
 
   bool isLargeOrMedium(TRWMedia constraints) {
-    return constraints.maxWidth > responsiveSize.small;
+    final w = constraints.maxWidth;
+    return responsiveSize.isLargeOrMedium(w);
   }
 
   bool isMedium(TRWMedia constraints) {
-    return constraints.maxWidth >= responsiveSize.small && constraints.maxWidth < responsiveSize.large;
+    final w = constraints.maxWidth;
+    return responsiveSize.isMedium(w);
   }
 
   @override
@@ -158,6 +176,5 @@ class ResponsiveElt extends StatelessWidget {
       _D.d(()=>'ResponsiveElt small: ${media.maxWidth}/$responsiveSize');
       return small ?? large!;
     }
-
   }
 }

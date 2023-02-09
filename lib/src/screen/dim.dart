@@ -40,6 +40,7 @@ class TDim {
   }
 }
 
+/// 設計稿 dimension 尺寸標註工具, 如設計稿
 class TDims {
   final TDim? small;
   final TDim? medium;
