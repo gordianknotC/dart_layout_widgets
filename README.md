@@ -192,7 +192,8 @@ DebugBox.setBoxDebugOn();
 ```
 
 ### ResponsiveScreen/ResponsiveELt | [source][responsive_widget]
-二者功能皆同，只是情境不同，均需使用在可取得 Constraint (如  LayoutBuilder) 下
+二者功能皆同，只是情境不同，均需使用在可取得 Constraint (如  LayoutBuilder) 下，
+透過已知 Constraint 的情況下，依據輸入的大／中／小 情境下，提供相對應版本的 Widget
 
 __ResponsiveScreen - example__ [demo][portfolio]
 
