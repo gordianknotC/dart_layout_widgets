@@ -1,13 +1,13 @@
 於 [flutter 2019 web portfolio][portfolio] 中抽出的 package
 
 ## 可用組件
-- [CustomPanGestureRecognizer](#CustomPanGestureRecognizer)
-- [PanelGestureRecognizer](#PanelGestureRecognizer)
-- [ScrollerNestablePanelGestureController](#ScrollerNestablePanelGestureController)
-- [DebugBox](#DebugBox)
-- [ResponsiveScreen/ResponsiveELt](#ResponsiveScreen/ResponsiveELt)
-- [ContextKeeper](#ContextKeeper)
-- [Dim](#Dim)
+- [CustomPanGestureRecognizer](#CustomPanGestureRecognizer--source)
+- [PanelGestureRecognizer](#PanelGestureRecognizer--source)
+- [ScrollerNestablePanelGestureController](#ScrollerNestablePanelGestureController--source)
+- [DebugBox](#DebugBox--source)
+- [ResponsiveScreen/ResponsiveELt](#ResponsiveScreen/ResponsiveELt--source)
+- [ContextKeeper](#ContextKeeper--source)
+- [Dim](#Dim--source)
 
 ### CustomPanGestureRecognizer | [source][custom_gesture]
 
@@ -198,8 +198,7 @@ __turning debug on__
 DebugBox.setBoxDebugOn();
 ```
 
-### ResponsiveScreen/ResponsiveELt 
-[source][responsive_widget]
+### ResponsiveScreen/ResponsiveELt | [source][responsive_widget]
 
 二者功能皆同，只是情境不同，均需使用在可取得 Constraint (如  LayoutBuilder) 下，
 透過已知 Constraint 的情況下，依據輸入的大／中／小 情境下，提供相對應版本的 Widget
